@@ -1,41 +1,56 @@
-name: Django CI/CD
+name: Django CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: 3.12
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
 
-    - name: Install dependencies
-      run: |
-        pip install django pytest pytest-django coverage
+      - name: Install uv
+        run: pip install uv
 
-    - name: Run tests with coverage
-      run: |
-        coverage run manage.py test
-        coverage report --fail-under=50
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run tests with coverage
+        run: uv run coverage run manage.py test
+
+      - name: Coverage report
+        run: uv run coverage report
+
+      - name: Fail if coverage < 50%
+        run: |
+          uv run coverage report | tee coverage.txt
+          COVERAGE=$(uv run coverage report | grep TOTAL | awk '{print $4}' | sed 's/%//')
+          echo "Coverage is $COVERAGE%"
+          if [ "$COVERAGE" -lt 50 ]; then
+            echo "Coverage below 50% - failing build"
+            exit 1
+          fi
 
   docker:
     needs: test
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Build Docker image
-      run: docker build -t happy_camp .
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-    - name: Run Docker container
-      run: docker run -d -p 8000:8000 happy_camp
+      - name: Build Docker image
+        run: docker build -t happy-camp .
