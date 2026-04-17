@@ -6,27 +6,44 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+
 <div class="container">
-    <h2>Login</h2>
-    <form method="post">
-        {% csrf_token %}
 
-        <label>Email</label>
-        {{ form.username }}
-        {{ form.username.errors }}
+    <div class="card" style="max-width: 400px; margin: auto;">
 
-        <label>Password</label>
-        {{ form.password }}
-        {{ form.password.errors }}
+        <h2 style="text-align:center;">Welcome Back 👋</h2>
+        <p style="text-align:center; color:#777;">Login to your account</p>
 
-        {{ form.non_field_errors }}
+        <form method="post">
+            {% csrf_token %}
 
-        <button type="submit">Login</button>
-    </form>
-    <p>
-        Don't have an account?
-        <a href="{% url 'register' %}">Register here</a>
-    </p>
+            <label>Email</label>
+            {{ form.username }}
+            {{ form.username.errors }}
+
+            <label>Password</label>
+            {{ form.password }}
+            {{ form.password.errors }}
+
+            {% if form.non_field_errors %}
+                <div style="color:red; margin-top:10px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <button type="submit" style="width:100%;">Login</button>
+        </form>
+
+        <hr style="margin:20px 0;">
+
+        <p style="text-align:center;">
+            Don’t have an account?
+            <a href="{% url 'register' %}">Register</a>
+        </p>
+
+    </div>
+
 </div>
+
 </body>
 </html>

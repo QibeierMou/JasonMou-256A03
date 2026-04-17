@@ -1,24 +1,61 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <!DOCTYPE html>
 <html>
-<head><title>User List</title></head>
+<head>
+    <title>User List</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
 <body>
 
-    <h2>All Users</h2>
+<div class="container">
 
-    {% for user in users %}
-        <div style="border:1px solid black; padding:10px; margin:10px;">
-            <p><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <p><strong>Role:</strong> {{ user.role }}</p>
-        </div>
-    {% empty %}
-        <p>No users found.</p>
-    {% endfor %}
+    <!-- HEADER -->
+    <div class="page-header">
+        <h2>All Users</h2>
+        <a class="button secondary" href="{% url 'event_list' %}">← Back</a>
+    </div>
 
-    <br>
-    <a href="{% url 'event_list' %}">Back to Events</a>
+    <!-- USERS -->
+    <div class="card">
+
+        {% if users %}
+
+            <table class="table">
+
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                <span class="badge role">
+                                    {{ user.role }}
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        {% else %}
+            <div class="empty-state">
+                <p>No users found.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+</div>
 
 </body>
 </html>

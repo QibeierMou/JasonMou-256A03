@@ -1,40 +1,65 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <!DOCTYPE html>
 <html>
-<head><title>Event Form</title></head>
+<head>
+    <title>Event Form</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
 <body>
 
-    <h2>Event Form</h2>
+<div class="container">
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Save</button>
-    </form>
+    <!-- HEADER -->
+    <div class="page-header">
+        <h2>Event Form</h2>
+        <a class="button secondary" href="{% url 'event_list' %}">← Back</a>
+    </div>
 
-    <br>
-    <a href="{% url 'event_list' %}">Cancel, go back</a>
+    <!-- EVENT FORM -->
+    <div class="card form-card">
+        <form method="post">
+            {% csrf_token %}
 
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+
+            <div class="form-actions">
+                <button class="button" type="submit">💾 Save</button>
+                <a class="button secondary" href="{% url 'event_list' %}">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <!-- POSITIONS SECTION (ADMIN ONLY) -->
     {% if request.user.role == "admin" %}
-        <hr>
+        <div class="card">
 
-        <h3>Positions</h3>
+            <div class="section-header">
+                <h3>Positions</h3>
+                <a class="button" href="{% url 'position_create' %}">+ Add Position</a>
+            </div>
 
-        <a href="{% url 'position_create' %}">+ Add Position</a>
+            <ul class="list">
+                {% for position in positions %}
+                    <li class="list-item">
+                        <span>{{ position.name }}</span>
 
-        <ul>
-            {% for position in positions %}
-                <li>
-                    {{ position.name }}
-                    <a href="{% url 'position_update' position.id %}">Edit</a>
-                    <a href="{% url 'position_delete' position.id %}">Delete</a>
-                </li>
-            {% empty %}
-                <li>No positions available</li>
-            {% endfor %}
-        </ul>
+                        <div>
+                            <a class="button small" href="{% url 'position_update' position.id %}">Edit</a>
+                            <a class="button danger small" href="{% url 'position_delete' position.id %}">Delete</a>
+                        </div>
+                    </li>
+                {% empty %}
+                    <li class="list-item empty">No positions available</li>
+                {% endfor %}
+            </ul>
+
+        </div>
     {% endif %}
+
+</div>
 
 </body>
 </html>

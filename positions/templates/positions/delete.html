@@ -1,16 +1,56 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <!DOCTYPE html>
 <html>
-<head><title>Delete Position</title></head>
+<head>
+    <title>Delete Position</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
 <body>
-    <h2>Delete Position</h2>
-    <p>Are you sure you want to delete <strong>{{ position.name }}</strong>?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Yes, delete</button>
-    </form>
-    <br>
-    <a href="{% url 'position_list' %}">No, go back</a>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <h2 class="danger-text">⚠ Delete Position</h2>
+        <a class="button secondary" href="{% url 'position_list' %}">← Back</a>
+    </div>
+
+    <!-- WARNING CARD -->
+    <div class="card danger-card">
+
+        <h3>Are you sure?</h3>
+
+        <p>
+            You are about to delete:
+            <strong>{{ position.name }}</strong>
+        </p>
+
+        <p class="warning">
+            This action cannot be undone.
+        </p>
+
+        <p>
+            This position may be used in events and registrations.
+        </p>
+
+        <!-- ACTIONS -->
+        <div class="form-actions">
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <button class="button danger" type="submit">
+                    🗑 Yes, Delete
+                </button>
+            </form>
+
+            <a class="button secondary" href="{% url 'position_list' %}">
+                Cancel
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
 </body>
 </html>

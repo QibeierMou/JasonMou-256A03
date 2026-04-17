@@ -1,66 +1,81 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <!DOCTYPE html>
 <html>
-<head><title>Events</title></head>
+<head>
+    <title>Events</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
 
 <body>
 
+<div class="container">
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div>
+            <a href="{% url 'event_list' %}">Home</a>
+
+            {% if request.user.role == "admin" %}
+                <a href="{% url 'create_event' %}">+ Create</a>
+                <a href="{% url 'user_list' %}">Users</a>
+                <a href="{% url 'all_events' %}">All Events</a>
+            {% endif %}
+
+            <a href="{% url 'upcoming_events' %}">Upcoming</a>
+
+            {% if request.user.role == "member" or request.user.role == "volunteer" %}
+                <a href="{% url 'my_events' %}">My Events</a>
+            {% endif %}
+
+            {% if request.user.role == "admin" or request.user.role == "member" %}
+                <a href="{% url 'event_people' %}">Event People</a>
+            {% endif %}
+        </div>
+
+        <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button>Logout</button>
+        </form>
+    </div>
+
     <h2>Upcoming Events</h2>
 
-    {% if request.user.role == 'admin' %}
-        <a href="{% url 'create_event' %}">Create Event</a> |
-    {% endif %}
-
-    <!-- Admin only -->
-    {% if request.user.role == "admin" %}
-    <a href="{% url 'user_list' %}">Users</a> |
-    <a href="{% url 'all_events' %}">All Events</a> |
-    {% endif %}
-
-    <!-- Everyone -->
-    <a href="{% url 'upcoming_events' %}">Upcoming Events</a> |
-
-    <!-- Member & Volunteer -->
-    {% if request.user.role == "member" or request.user.role == "volunteer" %}
-        <a href="{% url 'my_events' %}">My Events</a> |
-    {% endif %}
-
-    <!-- Admin & Member -->
-    {% if request.user.role == "admin" or request.user.role == "member" %}
-        <a href="{% url 'event_people' %}">Event People</a>
-    {% endif %}
-
-    <hr>
-
+    <!-- EVENT LIST -->
     {% for event in events %}
-        <h3>{{ event.name }}</h3>
-        <p>{{ event.description }}</p>
-        <p><strong>Start:</strong> {{ event.start_date }}</p>
-        <p><strong>End:</strong> {{ event.end_date }}</p>
+        <div class="card event">
 
-        {% if request.user.role == 'admin' %}
-            <a href="{% url 'update_event' event.id %}">Edit</a> |
-            <a href="{% url 'delete_event' event.id %}">Delete</a>
+            <h3>{{ event.name }}</h3>
+            <p>{{ event.description }}</p>
 
-        {% else %}
-            {% if event.id in joined_event_ids %}
-                <p>✓ You are registered</p>
-                <a href="{% url 'unregister' event.id %}">Unregister</a>
-            {% else %}
-                <a href="{% url 'event_detail' event.id %}">Register</a>
-            {% endif %}
-        {% endif %}
+            <p><strong>Start:</strong> {{ event.start_date }}</p>
+            <p><strong>End:</strong> {{ event.end_date }}</p>
 
-        <hr>
+            <div style="margin-top:10px;">
+
+                {% if request.user.role == 'admin' %}
+                    <a class="button" href="{% url 'update_event' event.id %}">Edit</a>
+                    <a class="button danger" href="{% url 'delete_event' event.id %}">Delete</a>
+
+                {% else %}
+                    {% if event.id in joined_event_ids %}
+                        <p class="success">✓ You are registered</p>
+                        <a class="button danger" href="{% url 'unregister' event.id %}">Unregister</a>
+                    {% else %}
+                        <a class="button" href="{% url 'event_detail' event.id %}">Register</a>
+                    {% endif %}
+                {% endif %}
+
+            </div>
+
+        </div>
+
     {% empty %}
-        <p>No upcoming events.</p>
+        <div class="card">
+            <p>No upcoming events.</p>
+        </div>
     {% endfor %}
 
-    <form action="{% url 'logout' %}" method="post">
-  {% csrf_token %}
-  <button type="submit">Logout</button>
-</form>
+</div>
 
 </body>
 </html>

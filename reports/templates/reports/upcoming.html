@@ -1,21 +1,60 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <!DOCTYPE html>
 <html>
-<head><title>Upcoming Events</title></head>
+<head>
+    <title>Upcoming Events</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
 <body>
-    <h2>Upcoming Events</h2>
-    {% for event in events %}
-        <div style="border:1px solid black; padding:10px; margin:10px;">
-            <h3>{{ event.name }}</h3>
-            <p>{{ event.description }}</p>
-            <p>Start: {{ event.start_date }}</p>
-            <p>End: {{ event.end_date }}</p>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <div>
+            <h2>Upcoming Events</h2>
+            <p class="subtext">Events that have not started yet</p>
         </div>
-    {% empty %}
-        <p>No upcoming events.</p>
-    {% endfor %}
-    <br>
-    <a href="{% url 'event_list' %}">Back to Events</a>
+
+        <a class="button secondary" href="{% url 'event_list' %}">← Back</a>
+    </div>
+
+    <!-- EVENTS -->
+    <div class="card">
+
+        {% if events %}
+
+            {% for event in events %}
+                <div class="event-card">
+
+                    <div class="event-header">
+                        <h3>{{ event.name }}</h3>
+
+                        <span class="badge upcoming">
+                            Upcoming
+                        </span>
+                    </div>
+
+                    <p class="event-desc">{{ event.description }}</p>
+
+                    <div class="event-info">
+                        <p><strong>Start:</strong> {{ event.start_date }}</p>
+                        <p><strong>End:</strong> {{ event.end_date }}</p>
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <div class="empty-state">
+                <p>No upcoming events.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+</div>
+
 </body>
 </html>

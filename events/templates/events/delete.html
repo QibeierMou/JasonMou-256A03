@@ -1,21 +1,56 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <!DOCTYPE html>
 <html>
-<head><title>Delete Event</title></head>
+<head>
+    <title>Delete Event</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
 <body>
 
-    <h2>Delete Event</h2>
-    <p>Are you sure you want to delete <strong>{{ event.name }}</strong>?</p>
-    <p>This will also delete all registrations for this event.</p>
+<div class="container">
 
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Yes, delete</button>
-    </form>
+    <!-- HEADER -->
+    <div class="page-header">
+        <h2 class="danger-text">⚠ Delete Event</h2>
+        <a class="button secondary" href="{% url 'event_list' %}">← Back</a>
+    </div>
 
-    <br>
-    <a href="{% url 'event_list' %}">No, go back</a>
+    <!-- WARNING CARD -->
+    <div class="card danger-card">
+
+        <h3>Are you sure?</h3>
+
+        <p>
+            You are about to delete:
+            <strong>{{ event.name }}</strong>
+        </p>
+
+        <p class="warning">
+            This action cannot be undone.
+        </p>
+
+        <p>
+            All registrations for this event will also be removed.
+        </p>
+
+        <!-- ACTIONS -->
+        <div class="form-actions">
+            <form method="post" style="display:inline;">
+                {% csrf_token %}
+                <button class="button danger" type="submit">
+                    🗑 Yes, Delete
+                </button>
+            </form>
+
+            <a class="button secondary" href="{% url 'event_list' %}">
+                Cancel
+            </a>
+        </div>
+
+    </div>
+
+</div>
 
 </body>
 </html>

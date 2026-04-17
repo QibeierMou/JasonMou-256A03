@@ -1,25 +1,57 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
 <!DOCTYPE html>
 <html>
-<head><title>My Events</title></head>
+<head>
+    <title>My Events</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
 <body>
 
-    <h2>My Registered Events</h2>
+<div class="container">
 
-    {% for reg in registrations %}
-        <div style="border:1px solid black; padding:10px; margin:10px;">
-            <h3>{{ reg.event.name }}</h3>
-            <p>Position: {{ reg.position.name }}</p>
-            <p>Start: {{ reg.event.start_date }}</p>
-            <p>End: {{ reg.event.end_date }}</p>
+    <!-- HEADER -->
+    <div class="page-header">
+        <div>
+            <h2>My Registered Events</h2>
+            <p class="subtext">Events you have signed up for</p>
         </div>
-    {% empty %}
-        <p>You have not registered for any events yet.</p>
-    {% endfor %}
 
-    <br>
-    <a href="{% url 'event_list' %}">Back to Events</a>
+        <a class="button secondary" href="{% url 'event_list' %}">← Back</a>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="card">
+
+        {% if registrations %}
+
+            {% for reg in registrations %}
+                <div class="event-card">
+
+                    <div class="event-header">
+                        <h3>{{ reg.event.name }}</h3>
+                        <span class="badge role member">
+                            {{ reg.position.name }}
+                        </span>
+                    </div>
+
+                    <div class="event-info">
+                        <p><strong>Start:</strong> {{ reg.event.start_date }}</p>
+                        <p><strong>End:</strong> {{ reg.event.end_date }}</p>
+                    </div>
+
+                </div>
+            {% endfor %}
+
+        {% else %}
+            <div class="empty-state">
+                <p>You have not registered for any events yet.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+</div>
 
 </body>
 </html>

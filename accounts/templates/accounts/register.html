@@ -9,40 +9,51 @@
 
 <div class="container">
 
-    <h2>Create Account</h2>
+    <div class="card" style="max-width: 450px; margin: auto;">
 
-    <form method="post">
-        {% csrf_token %}
+        <h2 style="text-align:center;">Create Account 🚀</h2>
+        <p style="text-align:center; color:#777;">Join Happy Camp today</p>
 
-        <label>Email</label>
-        {{ form.email }}
-        {{ form.email.errors }}
+        <form method="post">
+            {% csrf_token %}
 
-        <label>Phone Number</label>
-        {{ form.phone_number }}
-        {{ form.phone_number.errors }}
+            <label>Email</label>
+            {{ form.email }}
+            {{ form.email.errors }}
 
-        <label>Role</label>
-        {{ form.role }}
-        {{ form.role.errors }}
+            <label>Phone Number</label>
+            {{ form.phone_number }}
+            {{ form.phone_number.errors }}
 
-        <label>Password</label>
-        {{ form.password1 }}
-        {{ form.password1.errors }}
+            <label>Role</label>
+            {{ form.role }}
+            {{ form.role.errors }}
 
-        <label>Confirm Password</label>
-        {{ form.password2 }}
-        {{ form.password2.errors }}
+            <label>Password</label>
+            {{ form.password1 }}
+            {{ form.password1.errors }}
 
-        {{ form.non_field_errors }}
+            <label>Confirm Password</label>
+            {{ form.password2 }}
+            {{ form.password2.errors }}
 
-        <button type="submit">Register</button>
-    </form>
+            {% if form.non_field_errors %}
+                <div style="color:red; margin-top:10px;">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
 
-    <p>
-        Already have an account?
-        <a href="{% url 'login' %}">Login here</a>
-    </p>
+            <button type="submit" style="width:100%;">Create Account</button>
+        </form>
+
+        <hr style="margin:20px 0;">
+
+        <p style="text-align:center;">
+            Already have an account?
+            <a href="{% url 'login' %}">Login</a>
+        </p>
+
+    </div>
 
 </div>
 
