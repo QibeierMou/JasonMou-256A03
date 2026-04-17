@@ -1,0 +1,41 @@
+name: Django CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.12
+
+    - name: Install dependencies
+      run: |
+        pip install django pytest pytest-django coverage
+
+    - name: Run tests with coverage
+      run: |
+        coverage run manage.py test
+        coverage report --fail-under=50
+
+  docker:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Build Docker image
+      run: docker build -t happy_camp .
+
+    - name: Run Docker container
+      run: docker run -d -p 8000:8000 happy_camp

@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="container">
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+
+        <label>Email</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+
+        <label>Password</label>
+        {{ form.password }}
+        {{ form.password.errors }}
+
+        {{ form.non_field_errors }}
+
+        <button type="submit">Login</button>
+    </form>
+    <p>
+        Don't have an account?
+        <a href="{% url 'register' %}">Register here</a>
+    </p>
+</div>
+</body>
+</html>

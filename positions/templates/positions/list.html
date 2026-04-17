@@ -1,0 +1,22 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<!DOCTYPE html>
+<html>
+<head><title>Positions</title></head>
+<body>
+    <h2>Positions</h2>
+    <a href="{% url 'position_create' %}">+ Create New Position</a>
+    <hr>
+    {% for position in positions %}
+        <p>
+            {{ position.name }} |
+            <a href="{% url 'position_update' position.id %}">Edit</a> |
+            <a href="{% url 'position_delete' position.id %}">Delete</a>
+        </p>
+    {% empty %}
+        <p>No positions yet.</p>
+    {% endfor %}
+    <br>
+    <a href="{% url 'event_list' %}">Back to Events</a>
+</body>
+</html>
